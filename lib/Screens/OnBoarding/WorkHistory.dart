@@ -1,3 +1,4 @@
+import 'package:aluminia/BottomNavigation.dart';
 import 'package:aluminia/Home.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
@@ -232,8 +233,8 @@ class _WorkHistoryState extends State<WorkHistory> {
                     .addWork(company, designation, pickedDate1.toString(),
                         pickedDate2.toString())
                     .then((value) {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainPage()));
                 });
               },
             )
