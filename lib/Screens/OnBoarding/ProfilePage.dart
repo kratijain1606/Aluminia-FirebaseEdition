@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:aluminia/Screens/OnBoarding/UserImagePicker.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,24 +30,25 @@ class MapScreenState extends State<ProfilePage>
   }
 
   String imgUrl = "";
-
+  File _userImageFile;
   DateTime pickedDate;
   TextEditingController _namecontroller = TextEditingController();
   TextEditingController _dobcontroller = TextEditingController();
   TextEditingController _contactcontroller = TextEditingController();
   TextEditingController _gendercontroller = TextEditingController();
+  void _pickedImage(File image) {
+    _userImageFile = image;
+  }
 
   User firebaseUser = FirebaseAuth.instance.currentUser;
   bool isSelected = false;
   bool val = true;
 
+  String _fetchedimageUrl;
+
   int selectedIndex;
   @override
   Widget build(BuildContext context) {
-    Stream documentStream = FirebaseFirestore.instance
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .snapshots();
     FirebaseFirestore.instance
         .collection('users')
         .doc(firebaseUser.uid)
@@ -60,6 +65,8 @@ class MapScreenState extends State<ProfilePage>
       _namecontroller.text = documentSnapshot.data()['name'] ?? "";
       _dobcontroller.text = documentSnapshot.data()['dob'] ?? "";
       _contactcontroller.text = documentSnapshot.data()['phone'] ?? "";
+      _fetchedimageUrl = documentSnapshot.data()['picture'];
+      // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQsQh8tvclNkrB57vus8zpRAo72kuSDkBOXQ&usqp=CAU";
     });
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -99,14 +106,14 @@ class MapScreenState extends State<ProfilePage>
                               new Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 0.1 * height,
-                                    backgroundColor: Colors.green,
-                                    backgroundImage:
-                                        NetworkImage(widget.picUrl),
-                                  ),
-                                  // UserImagePicker(_pickedImage,
-                                  //     _fetchedimageUrl, _status),
+                                  // CircleAvatar(
+                                  //   radius: 0.1 * height,
+                                  //   backgroundColor: Colors.green,
+                                  //   backgroundImage:
+                                  //       // NetworkImage(widget.picUrl),
+                                  // ),
+                                  UserImagePicker(
+                                      _pickedImage, _fetchedimageUrl, _status),
                                 ],
                               ),
                             ],
@@ -353,11 +360,21 @@ class MapScreenState extends State<ProfilePage>
                     setState(() {
                       _status = true;
                     });
-
+                    final ref = FirebaseStorage.instance
+                        .ref()
+                        .child('profile_images')
+                        .child(firebaseUser.uid + '.jpg');
+                    if (_userImageFile != null) {
+                      await ref.putFile(_userImageFile).onComplete;
+                      imgUrl = await ref.getDownloadURL();
+                    } else {
+                      imgUrl = _fetchedimageUrl;
+                    }
                     await FirebaseFirestore.instance
                         .collection('users')
                         .doc(firebaseUser.uid)
                         .set({
+                      "picture": imgUrl,
                       "name": _namecontroller.text,
                       "dob": _dobcontroller.text,
                       "phone": _contactcontroller.text
