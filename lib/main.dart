@@ -1,3 +1,4 @@
+import 'package:aluminia/BottomNavigation.dart';
 import 'package:aluminia/Home.dart';
 import 'package:aluminia/Screens/OnBoarding/Login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,7 +13,8 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Aluminia()
+      home: Aluminia(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -23,12 +25,11 @@ class Aluminia extends StatefulWidget {
 }
 
 class _AluminiaState extends State<Aluminia> {
-
   bool loading = true, login = false;
 
   void initState() {
     super.initState();
-    Firebase.initializeApp().whenComplete(() { 
+    Firebase.initializeApp().whenComplete(() {
       setState(() {
         loading = false;
       });
@@ -37,9 +38,9 @@ class _AluminiaState extends State<Aluminia> {
   }
 
   checkLogin() async {
-    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _login = prefs.getBool('login');
-    if(_login != null) {
+    if (_login != null) {
       setState(() {
         login = _login;
       });
@@ -49,11 +50,12 @@ class _AluminiaState extends State<Aluminia> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: loading ? Center(
-          child: CircularProgressIndicator()
-        ) : login ? Home() : Login(),
+        body: loading
+            ? Center(child: CircularProgressIndicator())
+            : login ? MainPage() : Login(),
       ),
     );
   }
