@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:aluminia/Screens/OnBoarding/UserImagePicker.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,7 +35,6 @@ class MapScreenState extends State<ProfilePage>
   TextEditingController _namecontroller = TextEditingController();
   TextEditingController _dobcontroller = TextEditingController();
   TextEditingController _contactcontroller = TextEditingController();
-  TextEditingController _gendercontroller = TextEditingController();
   void _pickedImage(File image) {
     _userImageFile = image;
   }
@@ -65,16 +63,11 @@ class MapScreenState extends State<ProfilePage>
         _contactcontroller.text = documentSnapshot.data()['phone'] ?? "";
         _fetchedimageUrl = documentSnapshot.data()['picture'];
       });
-      // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQsQh8tvclNkrB57vus8zpRAo72kuSDkBOXQ&usqp=CAU";
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // print("Yo");
-
-    // print(documentSnapshot.data()['name']);
-
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return new Scaffold(
@@ -113,12 +106,6 @@ class MapScreenState extends State<ProfilePage>
                               new Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  // CircleAvatar(
-                                  //   radius: 0.1 * height,
-                                  //   backgroundColor: Colors.green,
-                                  //   backgroundImage:
-                                  //       // NetworkImage(widget.picUrl),
-                                  // ),
                                   UserImagePicker(
                                       _pickedImage, _fetchedimageUrl, _status),
                                 ],
@@ -147,7 +134,6 @@ class MapScreenState extends State<ProfilePage>
                               children: [
                                 new Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  // mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     new Text(
                                       'Personal Information',
@@ -205,7 +191,6 @@ class MapScreenState extends State<ProfilePage>
                                       decoration: const InputDecoration(
                                           hintText: "Name"),
                                       enabled: !_status,
-                                      // autofocus: !_status,
                                     ),
                                   ),
                                 ],
@@ -248,9 +233,6 @@ class MapScreenState extends State<ProfilePage>
                                       style: GoogleFonts.poppins(
                                         fontSize: 18,
                                       )),
-                              // trailing: !_status
-                              //     ? Icon(Icons.keyboard_arrow_down)
-                              //     : Container(),
                               onTap: !_status ? _pickDate : () {},
                             ),
                           ),

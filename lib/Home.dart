@@ -1,5 +1,3 @@
-import 'package:aluminia/Screens/OnBoarding/Education.dart';
-import 'package:aluminia/Screens/OnBoarding/users.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -64,8 +62,6 @@ class _HomeState extends State<Home> {
             }
             return ListView(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
-              // itemCount: 10,
-              // return  itemBuilder: (BuildContext context, int index) {
               {
                 return Container(
                     padding: EdgeInsets.all(10),
@@ -75,12 +71,7 @@ class _HomeState extends State<Home> {
                             width: 0.8 * w,
                             height: 0.2 * h,
                             child: GestureDetector(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => UsersList()));
-                              },
+                              onTap: () {},
                               child: Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
@@ -98,20 +89,17 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // Icon(Icons.thumb_up_alt_outlined),
                                 Icon(Icons.thumb_up),
                                 Text(" Like"),
                                 SizedBox(
                                   width: 0.1 * w,
                                 ),
                                 Icon(Icons.share),
-                                // Icon(Icons.share_outlined),
                                 Text(" Share"),
                                 SizedBox(
                                   width: 0.1 * w,
                                 ),
                                 Icon(Icons.comment),
-                                // Icon(Icons.share_outlined),
                                 Text(" Comment")
                               ],
                             )),
@@ -120,68 +108,6 @@ class _HomeState extends State<Home> {
               }
             }).toList());
           }),
-
-      // SingleChildScrollView(
-      //   child: Column(
-      //     children: [
-      //       Container(
-      //           padding: EdgeInsets.only(bottom: 0.1 * h),
-      //           height: h,
-      //           child: ListView.builder(
-      //               itemCount: 10,
-      //               itemBuilder: (BuildContext context, int index) {
-      //                 return Container(
-      //                   padding: EdgeInsets.all(10),
-      //                   child: Column(
-      //                     children: [
-      //                       Container(
-      //                           width: 0.8 * w,
-      //                           height: 0.2 * h,
-      //                           child: GestureDetector(
-      //                             onTap: () {
-      //                               Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(
-      //                                       builder: (context) => UsersList()));
-      //                             },
-      //                             child: Card(
-      //                               shape: RoundedRectangleBorder(
-      //                                   borderRadius:
-      //                                       BorderRadius.circular(15)),
-      //                               elevation: 5,
-      //                               color: blu,
-      //                             ),
-      //                           )),
-      //                       Padding(
-      //                           padding: EdgeInsets.symmetric(vertical: 10),
-      //                           child: Row(
-      //                             crossAxisAlignment: CrossAxisAlignment.center,
-      //                             mainAxisAlignment: MainAxisAlignment.center,
-      //                             children: [
-      //                               // Icon(Icons.thumb_up_alt_outlined),
-      //                               Icon(Icons.thumb_up),
-      //                               Text(" Like"),
-      //                               SizedBox(
-      //                                 width: 0.1 * w,
-      //                               ),
-      //                               Icon(Icons.share),
-      //                               // Icon(Icons.share_outlined),
-      //                               Text(" Share"),
-      //                               SizedBox(
-      //                                 width: 0.1 * w,
-      //                               ),
-      //                               Icon(Icons.comment),
-      //                               // Icon(Icons.share_outlined),
-      //                               Text(" Comment")
-      //                             ],
-      //                           ))
-      //                     ],
-      //                   ),
-      //                 );
-      //               }))
-      //     ],
-      //   ),
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {},

@@ -17,8 +17,6 @@ class EducationParameters {
   EducationParameters(this.school, this.degree, this.startDate, this.endDate);
 }
 
-// <EducationParameters> list = [];
-
 class _EducationState extends State<Education> {
   var list = List<EducationParameters>();
   var count = 1;
@@ -26,8 +24,6 @@ class _EducationState extends State<Education> {
   DateTime pickedDate1;
   DateTime pickedDate2;
   String schoolName, degree, startDate, endDate;
-
-  // var edu = new EducationParameters();
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +68,6 @@ class _EducationState extends State<Education> {
                 itemBuilder: (BuildContext ctx, int index) {
                   return Expanded(
                     child: Form(
-                      // key: _formKey,
-
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

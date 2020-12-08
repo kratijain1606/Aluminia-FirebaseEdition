@@ -11,7 +11,6 @@ class MainPage extends StatefulWidget {
 }
 
 int _currentIndex = 0;
-
 bool _isSearching = false;
 
 class _MainPageState extends State<MainPage> {
@@ -25,7 +24,6 @@ class _MainPageState extends State<MainPage> {
           picUrl:
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2z2f1qUHveOGHdu7uHfwmXG2CcU2Zr64GNg&usqp=CAU")
     ];
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(

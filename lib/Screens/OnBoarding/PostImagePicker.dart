@@ -1,5 +1,4 @@
 import 'package:aluminia/const.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import "package:flutter/material.dart";
@@ -9,7 +8,7 @@ class UserImagePicker extends StatefulWidget {
   UserImagePicker(this.pickImageFn, this.imageUrl, this.profileImage);
   final void Function(File pickedImage) pickImageFn;
   final String profileImage;
-  String imageUrl;
+  final String imageUrl;
 
   @override
   _UserImagePickerState createState() => _UserImagePickerState();
@@ -35,13 +34,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
         Container(
           height: 100,
           width: 100,
-          // decoration: BoxDecoration(
-          //     image: DecorationImage(
-          //         fit: BoxFit.cover,
-          //         image: _pickedImage != null
-          //             ? FileImage(_pickedImage)
-          //             : CachedNetworkImageProvider(widget.imageUrl)
-          //             )),
         ),
         FlatButton.icon(
             textColor: Theme.of(context).primaryColor,

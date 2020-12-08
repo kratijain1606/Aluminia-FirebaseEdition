@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:aluminia/Screens/OnBoarding/PostImagePicker.dart';
-import 'package:aluminia/Screens/OnBoarding/users.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +56,6 @@ class _PostState extends State<Post> {
       }
       url = documentSnapshot.data()['picture'];
       _fetchedimageUrl = documentSnapshot.data()['picture'];
-      // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQsQh8tvclNkrB57vus8zpRAo72kuSDkBOXQ&usqp=CAU";
     });
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -97,29 +94,8 @@ class _PostState extends State<Post> {
                       child: CircleAvatar(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.green,
-                          backgroundImage: NetworkImage(
-                              // "https://static.jobscan.co/blog/uploads/linkedin-profile-picture-1280x720.jpg")),
-                              url))),
+                          backgroundImage: NetworkImage(url))),
                   Row(
-                    /*
-                      onTap: () {
-                      CollectionReference posts =
-                          FirebaseFirestore.instance.collection('posts');
-
-                      Future<void> addUser() {
-                        // Call the user's CollectionReference to add a new user
-                        return posts
-                            .add({
-                              'description': _controller.text
-                              // 42
-                            })
-                            .then((value) => print("User Added"))
-                            .catchError(
-                                (error) => print("Failed to add user: $error"));
-                      }
-                    },
-                  
-                    */
                     children: [
                       FlatButton(
                         color: blu,
@@ -151,7 +127,6 @@ class _PostState extends State<Post> {
                   decoration: InputDecoration(
                     hintText: "Add description to your post",
                     border: OutlineInputBorder(),
-                    //labelText: "Description",
                   ),
                   textInputAction: TextInputAction.newline,
                   keyboardType: TextInputType.multiline,
@@ -173,8 +148,6 @@ class _PostState extends State<Post> {
 
   Future<void> addPost() {
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
-
-    // Call the user's CollectionReference to add a new user
     return posts
         .add({
           'description': _controller.text

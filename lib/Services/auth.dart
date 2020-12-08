@@ -50,7 +50,6 @@ class Auth {
 
     var firebaseUser = FirebaseAuth.instance.currentUser;
     var newId = firebaseUser.uid;
-    // String image = await uploadImage(_imageFile);
     return users
         .doc(newId)
         .set({
@@ -58,7 +57,6 @@ class Auth {
           'email': email,
           'dob': dob,
           'gender': gender,
-          // 'image': image,
           'phone': phone
         })
         .then((value) => print("User Added"))
@@ -102,7 +100,6 @@ class Auth {
     var firebaseUser = FirebaseAuth.instance.currentUser;
     print("uid");
     print(firebaseUser.uid);
-    // return null;
     return users
         .doc(firebaseUser.uid)
         .set({

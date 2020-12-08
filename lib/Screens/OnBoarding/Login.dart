@@ -1,10 +1,8 @@
 import 'package:aluminia/BottomNavigation.dart';
-import 'package:aluminia/Home.dart';
 import 'package:aluminia/Screens/OnBoarding/SignUp.dart';
 import 'package:aluminia/Screens/OnBoarding/UserInfo.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
-import 'package:aluminia/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

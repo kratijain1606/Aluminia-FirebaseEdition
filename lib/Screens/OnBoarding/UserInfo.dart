@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:aluminia/Home.dart';
 import 'package:aluminia/Screens/OnBoarding/Education.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
@@ -42,9 +41,7 @@ class _UserInfoState extends State<UserInfo> {
                     shadowColor: blu,
                     shape: CircleBorder(),
                     child: GestureDetector(
-                      onTap: () => {
-                        // pickImage()
-                      },
+                      onTap: () => {},
                       child: CircleAvatar(
                         radius: 0.1 * h,
                         backgroundColor: Colors.white,

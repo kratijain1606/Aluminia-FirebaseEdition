@@ -1,9 +1,7 @@
-import 'package:aluminia/Screens/OnBoarding/Education.dart';
 import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,8 +10,6 @@ class UsersList extends StatefulWidget {
   @override
   _UsersListState createState() => _UsersListState();
 }
-
-int count = 0;
 
 class _UsersListState extends State<UsersList> {
   double w, h;
@@ -68,11 +64,7 @@ class _UsersListState extends State<UsersList> {
             }
             return ListView(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
-              // itemCount: 10,
-              // return  itemBuilder: (BuildContext context, int index) {
               {
-                count++;
-                bool tapped = false;
                 return Container(
                   padding: EdgeInsets.all(10),
                   child: Column(
@@ -81,24 +73,13 @@ class _UsersListState extends State<UsersList> {
                           width: 0.9 * w,
                           height: 0.15 * h,
                           child: GestureDetector(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => UserList()));
-                            },
+                            onTap: () {},
                             child: InkWell(
                               onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ProfilePage(
-                                            // picUrl: document.data()['picture']
-                                            )
-                                        // Profile(
-                                        //     picUrl: document
-                                        //         .data()['picture'])
-                                        ));
+                                        builder: (context) => ProfilePage()));
                               },
                               child: Card(
                                 shape: RoundedRectangleBorder(
@@ -124,7 +105,6 @@ class _UsersListState extends State<UsersList> {
                                                   backgroundColor: Colors.green,
                                                   foregroundColor: Colors.green,
                                                   backgroundImage: NetworkImage(
-                                                      // "https://static.jobscan.co/blog/uploads/linkedin-profile-picture-1280x720.jpg")),
                                                       document
                                                           .data()['picture']))),
                                           SizedBox(
@@ -158,8 +138,6 @@ class _UsersListState extends State<UsersList> {
                                         child: FlatButton(
                                             onPressed: () {
                                               auth.addConnection(document.id);
-
-                                              // print(cardsValue[count]);
                                             },
                                             color: blu,
                                             shape: RoundedRectangleBorder(

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import "package:flutter/material.dart";
 import 'dart:io';
-// import 'package:kudos_ware/utils/common.dart';
 
 class UserImagePicker extends StatefulWidget {
   UserImagePicker(this.pickImageFn, this.imageUrl, this.status);
@@ -29,8 +28,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    // final height = getHeight(context);
-
     final height = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
