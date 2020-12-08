@@ -27,6 +27,7 @@ class MapScreenState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
+    init();
   }
 
   String imgUrl = "";
@@ -47,9 +48,8 @@ class MapScreenState extends State<ProfilePage>
   String _fetchedimageUrl;
 
   int selectedIndex;
-  @override
-  Widget build(BuildContext context) {
-    FirebaseFirestore.instance
+  init() async {
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(firebaseUser.uid)
         .get()
@@ -59,15 +59,22 @@ class MapScreenState extends State<ProfilePage>
       } else {
         print('Document does not exist on the database');
       }
-      // print("Yo");
-      // print(documentSnapshot.data()['name']);
-
-      _namecontroller.text = documentSnapshot.data()['name'] ?? "";
-      _dobcontroller.text = documentSnapshot.data()['dob'] ?? "";
-      _contactcontroller.text = documentSnapshot.data()['phone'] ?? "";
-      _fetchedimageUrl = documentSnapshot.data()['picture'];
+      setState(() {
+        _namecontroller.text = documentSnapshot.data()['name'] ?? "";
+        _dobcontroller.text = documentSnapshot.data()['dob'] ?? "";
+        _contactcontroller.text = documentSnapshot.data()['phone'] ?? "";
+        _fetchedimageUrl = documentSnapshot.data()['picture'];
+      });
       // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQsQh8tvclNkrB57vus8zpRAo72kuSDkBOXQ&usqp=CAU";
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // print("Yo");
+
+    // print(documentSnapshot.data()['name']);
+
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return new Scaffold(

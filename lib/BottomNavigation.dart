@@ -1,4 +1,5 @@
 import 'package:aluminia/Home.dart';
+import 'package:aluminia/Screens/CreatePost.dart';
 import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
 import 'package:aluminia/Screens/OnBoarding/UserInfo.dart';
 import 'package:aluminia/Screens/OnBoarding/users.dart';
@@ -19,7 +20,7 @@ class _MainPageState extends State<MainPage> {
     List<Widget> _screens = [
       Home(),
       UsersList(),
-      UserInfo(),
+      Post(),
       ProfilePage(
           picUrl:
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2z2f1qUHveOGHdu7uHfwmXG2CcU2Zr64GNg&usqp=CAU")
@@ -52,7 +53,7 @@ class _MainPageState extends State<MainPage> {
                 icon: Icon(Icons.check_box)),
             BottomNavigationBarItem(
               icon: Icon(Icons.chat),
-              title: Text('Info'),
+              title: Text('Posts'),
             ),
             BottomNavigationBarItem(
                 title: Text(
