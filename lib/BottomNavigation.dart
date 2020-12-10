@@ -1,7 +1,6 @@
 import 'package:aluminia/Home.dart';
-import 'package:aluminia/Screens/CreatePost.dart';
+import 'package:aluminia/Screens/OnBoarding/CreatePost.dart';
 import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
-import 'package:aluminia/Screens/OnBoarding/UserInfo.dart';
 import 'package:aluminia/Screens/OnBoarding/users.dart';
 import 'package:flutter/material.dart';
 

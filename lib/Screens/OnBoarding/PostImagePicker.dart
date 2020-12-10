@@ -31,10 +31,10 @@ class _UserImagePickerState extends State<UserImagePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          height: 100,
-          width: 100,
-        ),
+        // Container(
+        //   height: 100,
+        //   width: 100,
+        // ),
         FlatButton.icon(
             textColor: Theme.of(context).primaryColor,
             onPressed: _pickImage,
@@ -45,7 +45,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             ),
             label: Text(
               'Add Image',
-              style: GoogleFonts.comfortaa(fontSize: 32, color: blu),
+              style: GoogleFonts.comfortaa(fontSize: 22, color: blu),
             )),
       ],
     );

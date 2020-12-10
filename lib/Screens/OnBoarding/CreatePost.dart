@@ -3,9 +3,11 @@ import 'package:aluminia/Screens/OnBoarding/PostImagePicker.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+String imgUrl = "";
 void showSimpleDialogBox(BuildContext context, String message) {
   showDialog(
     context: context,
@@ -29,6 +31,7 @@ class Post extends StatefulWidget {
 }
 
 TextEditingController _controller = new TextEditingController();
+
 FocusNode _descriptionsnode = FocusNode();
 String url;
 User firebaseUser = FirebaseAuth.instance.currentUser;
@@ -97,22 +100,8 @@ class _PostState extends State<Post> {
                           backgroundImage: NetworkImage(url))),
                   Row(
                     children: [
-                      FlatButton(
-                        color: blu,
-                        child: Text(
-                          "Share Post",
-                          style: GoogleFonts.comfortaa(
-                            fontSize: 18,
-                          ),
-                        ),
-                        onPressed: () {
-                          addPost();
-                          showSimpleDialogBox(
-                              context, "Your achievement has been posted");
-                          _controller.clear();
-                        },
-                      ),
-                      Icon(Icons.arrow_right),
+                      UserImagePicker(
+                          _pickedImage, _fetchedimageUrl, profileimage),
                     ],
                   )
                 ],
@@ -139,17 +128,47 @@ class _PostState extends State<Post> {
                 thickness: 10,
               ),
             ),
-            UserImagePicker(_pickedImage, _fetchedimageUrl, profileimage),
+            SizedBox(
+              height: 20,
+            ),
+            FlatButton(
+              color: blu,
+              child: Text(
+                "Share Post",
+                style: GoogleFonts.comfortaa(
+                  fontSize: 18,
+                ),
+              ),
+              onPressed: () async {
+                final ref = FirebaseStorage.instance
+                    .ref()
+                    .child('profile_images')
+                    .child(firebaseUser.uid + '.jpg');
+                if (_userImageFile != null) {
+                  await ref.putFile(_userImageFile).onComplete;
+                  imgUrl = await ref.getDownloadURL();
+                } else {
+                  imgUrl = _fetchedimageUrl;
+                }
+
+                addPost(imgUrl);
+                showSimpleDialogBox(
+                    context, "Your achievement has been posted");
+                // _controller.clear();
+              },
+            ),
+            // Icon(Icons.arrow_right),
           ],
         ),
       ),
     );
   }
 
-  Future<void> addPost() {
+  Future<void> addPost(String imgUrl) async {
     CollectionReference posts = FirebaseFirestore.instance.collection('posts');
     return posts
         .add({
+          "picture": imgUrl,
           'description': _controller.text
           // 42
         })

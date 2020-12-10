@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
     prefs.setBool('login', true);
   }
 
+  bool status = true;
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
@@ -69,18 +70,76 @@ class _HomeState extends State<Home> {
                       children: [
                         Container(
                             width: 0.8 * w,
-                            height: 0.2 * h,
+                            // height: 0.5 * h,
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                print(document.data()['picture']);
+                              },
                               child: Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(20.0),
-                                  child: Text(document.data()['description']),
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            // Text(document.data()['description']),
+                                            Expanded(
+                                              child: Container(
+                                                width: 0.6 * w,
+                                                child: status
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            status = !status;
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          child: Text(
+                                                              document.data()[
+                                                                  'description'],
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis),
+                                                        ),
+                                                      )
+                                                    : GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            status = !status;
+                                                          });
+                                                        },
+                                                        child: Text(
+                                                            document.data()[
+                                                                'description']),
+                                                      ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(height: 20),
+                                        Container(
+                                          height: 0.6 * w,
+                                          // width: 250,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.black),
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/image.jpg'),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15)),
                                 elevation: 5,
-                                color: blu,
+                                // color: blu,
                               ),
                             )),
                         Padding(

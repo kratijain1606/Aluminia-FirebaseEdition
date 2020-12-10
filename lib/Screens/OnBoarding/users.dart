@@ -14,10 +14,20 @@ class UsersList extends StatefulWidget {
 class _UsersListState extends State<UsersList> {
   double w, h;
 
+  CollectionReference users;
+  bool _isLoading = false;
   Auth auth = new Auth();
   void initState() {
+    setState(() {
+      _isLoading = true;
+    });
     super.initState();
+    users = FirebaseFirestore.instance.collection('users');
     setLogin();
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   setLogin() async {
@@ -25,19 +35,21 @@ class _UsersListState extends State<UsersList> {
     prefs.setBool('login', true);
   }
 
-  List<String> list;
+  List<bool> list;
 
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
     w = MediaQuery.of(context).size.width;
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "Aluminia",
           style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
+        ),
+        leading: Icon(
+          Icons.more_vert,
+          color: Colors.black,
         ),
         actions: [
           Padding(
@@ -45,122 +57,139 @@ class _UsersListState extends State<UsersList> {
               child: CircleAvatar(
                 child: Icon(Icons.person),
                 backgroundColor: blu,
-              ))
+              )),
         ],
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: users.snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text('Something went wrong');
-            }
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : StreamBuilder<QuerySnapshot>(
+              stream: users.snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
-            }
-            return ListView(
-                children: snapshot.data.docs.map((DocumentSnapshot document) {
-              {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Container(
-                          width: 0.9 * w,
-                          height: 0.15 * h,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProfilePage()));
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                elevation: 5,
-                                color: Colors.white,
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading");
+                }
+                return ListView(
+                    children:
+                        snapshot.data.docs.map((DocumentSnapshot document) {
+                  {
+                    list = new List(snapshot.data.size);
+                    print(snapshot.data.size);
+                    return Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Container(
+                              width: 0.9 * w,
+                              height: 0.15 * h,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProfilePage()));
+                                  },
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    elevation: 5,
+                                    color: Colors.white,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Container(
-                                              width: 70,
-                                              height: 70,
-                                              child: CircleAvatar(
-                                                  backgroundColor: Colors.green,
-                                                  foregroundColor: Colors.green,
-                                                  backgroundImage: NetworkImage(
-                                                      document
-                                                          .data()['picture']))),
-                                          SizedBox(
-                                            width: 15.0,
+                                          Row(
+                                            children: <Widget>[
+                                              Container(
+                                                  width: 70,
+                                                  height: 70,
+                                                  child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.green,
+                                                      foregroundColor:
+                                                          Colors.green,
+                                                      backgroundImage:
+                                                          NetworkImage(document
+                                                                  .data()[
+                                                              'picture']))),
+                                              SizedBox(
+                                                width: 15.0,
+                                              ),
+                                              Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      document.data()['name'],
+                                                      style:
+                                                          GoogleFonts.comfortaa(
+                                                              color: blu,
+                                                              fontSize: 18),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                        document
+                                                            .data()['gender'],
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.grey)),
+                                                  ])
+                                            ],
                                           ),
-                                          Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Text(
-                                                  document.data()['name'],
-                                                  style: GoogleFonts.comfortaa(
-                                                      color: blu, fontSize: 18),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(document.data()['gender'],
-                                                    style: TextStyle(
-                                                        color: Colors.grey)),
-                                              ])
+                                          Container(
+                                            alignment: Alignment.center,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 10),
+                                            child: FlatButton(
+                                                onPressed: () {
+                                                  auth.addConnection(
+                                                      document.id);
+                                                },
+                                                color: blu,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                child: Text(
+                                                  "Connect",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )),
+                                          )
                                         ],
                                       ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 10),
-                                        child: FlatButton(
-                                            onPressed: () {
-                                              auth.addConnection(document.id);
-                                            },
-                                            color: blu,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: Text(
-                                              "Connect",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                      )
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
-                );
-              }
-            }).toList());
-          }),
+                              )),
+                        ],
+                      ),
+                    );
+                  }
+                }).toList());
+              }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {},
