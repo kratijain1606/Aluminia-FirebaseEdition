@@ -44,9 +44,20 @@ String profileimage =
     'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTOyEXAbv0XrpFyGfpuRgw_3SItiGapPbWYwg&usqp=CAU';
 String _fetchedimageUrl;
 
+bool _isLoading = false;
+
 class _PostState extends State<Post> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  init() async {
+    setState(() {
+      _isLoading = true;
+    });
     FirebaseFirestore.instance
         .collection('users')
         .doc(firebaseUser.uid)
@@ -59,7 +70,14 @@ class _PostState extends State<Post> {
       }
       url = documentSnapshot.data()['picture'];
       _fetchedimageUrl = documentSnapshot.data()['picture'];
+      setState(() {
+        _isLoading = false;
+      });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -80,87 +98,90 @@ class _PostState extends State<Post> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
                 children: [
-                  Container(
-                      width: 60,
-                      height: 60,
-                      child: CircleAvatar(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.green,
-                          backgroundImage: NetworkImage(url))),
-                  Row(
-                    children: [
-                      UserImagePicker(
-                          _pickedImage, _fetchedimageUrl, profileimage),
-                    ],
-                  )
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            width: 60,
+                            height: 60,
+                            child: CircleAvatar(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.green,
+                                backgroundImage:
+                                    // AssetImage('assets/images/PSe.jpeg')
+                                    NetworkImage(url))),
+                        Row(
+                          children: [
+                            UserImagePicker(
+                                _pickedImage, _fetchedimageUrl, profileimage),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(20 * width / 411,
+                          height * 10 / 740, 20 * width / 411, 0),
+                      child: TextFormField(
+                        controller: _controller,
+                        focusNode: _descriptionsnode,
+                        decoration: InputDecoration(
+                          hintText: "Add description to your post",
+                          border: OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.newline,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 15,
+                      ),),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+                    child: Divider(
+                      thickness: 10,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  FlatButton(
+                    color: blu,
+                    child: Text(
+                      "Share Post",
+                      style: GoogleFonts.comfortaa(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onPressed: () async {
+                      final ref = FirebaseStorage.instance
+                          .ref()
+                          .child('profile_images')
+                          .child(firebaseUser.uid + '.jpg');
+                      if (_userImageFile != null) {
+                        await ref.putFile(_userImageFile).onComplete;
+                        imgUrl = await ref.getDownloadURL();
+                      } else {
+                        imgUrl = _fetchedimageUrl;
+                      }
+
+                      addPost(imgUrl);
+                      showSimpleDialogBox(
+                          context, "Your achievement has been posted");
+                      _controller.clear();
+                    },
+                  ),
                 ],
               ),
             ),
-            Padding(
-                padding: EdgeInsets.fromLTRB(
-                    20 * width / 411, height * 10 / 740, 20 * width / 411, 0),
-                child: TextFormField(
-                  controller: _controller,
-                  focusNode: _descriptionsnode,
-                  decoration: InputDecoration(
-                    hintText: "Add description to your post",
-                    border: OutlineInputBorder(),
-                  ),
-                  textInputAction: TextInputAction.newline,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 15,
-                )),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
-              child: Divider(
-                thickness: 10,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            FlatButton(
-              color: blu,
-              child: Text(
-                "Share Post",
-                style: GoogleFonts.comfortaa(
-                  fontSize: 18,
-                ),
-              ),
-              onPressed: () async {
-                final ref = FirebaseStorage.instance
-                    .ref()
-                    .child('profile_images')
-                    .child(firebaseUser.uid + '.jpg');
-                if (_userImageFile != null) {
-                  await ref.putFile(_userImageFile).onComplete;
-                  imgUrl = await ref.getDownloadURL();
-                } else {
-                  imgUrl = _fetchedimageUrl;
-                }
-
-                addPost(imgUrl);
-                showSimpleDialogBox(
-                    context, "Your achievement has been posted");
-                // _controller.clear();
-              },
-            ),
-            // Icon(Icons.arrow_right),
-          ],
-        ),
-      ),
     );
   }
 
@@ -169,8 +190,9 @@ class _PostState extends State<Post> {
     return posts
         .add({
           "picture": imgUrl,
-          'description': _controller.text
-          // 42
+          'description': _controller.text,
+          'like': false,
+          'displayDesc': false
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));

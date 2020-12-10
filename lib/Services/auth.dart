@@ -56,6 +56,8 @@ class Auth {
           'name': name,
           'email': email,
           'dob': dob,
+          'picture':
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKGQHa6WkBnTdHFI7ZsODlxNsTSkTht3bMEA&usqp=CAU",
           'gender': gender,
           'phone': phone
         })

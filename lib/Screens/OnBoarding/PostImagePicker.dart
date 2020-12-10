@@ -31,10 +31,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Container(
-        //   height: 100,
-        //   width: 100,
-        // ),
         FlatButton.icon(
             textColor: Theme.of(context).primaryColor,
             onPressed: _pickImage,

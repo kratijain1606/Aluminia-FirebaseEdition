@@ -1,4 +1,4 @@
-import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
+import 'package:aluminia/Screens/OnBoarding/ConnectionProfile.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +10,8 @@ class UsersList extends StatefulWidget {
   @override
   _UsersListState createState() => _UsersListState();
 }
+
+String img = "";
 
 class _UsersListState extends State<UsersList> {
   double w, h;
@@ -28,6 +30,10 @@ class _UsersListState extends State<UsersList> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  getImage(DocumentSnapshot ds) async {
+    img = await ds.data()['picture'];
   }
 
   setLogin() async {
@@ -82,23 +88,18 @@ class _UsersListState extends State<UsersList> {
                   {
                     list = new List(snapshot.data.size);
                     print(snapshot.data.size);
+                    getImage(document);
                     return Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
                           Container(
-                              width: 0.9 * w,
-                              height: 0.15 * h,
+                              width: 0.95 * w,
+                              // height: 0.15 * h,
                               child: GestureDetector(
                                 onTap: () {},
                                 child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage()));
-                                  },
+                                  onTap: () {},
                                   child: Card(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -118,17 +119,29 @@ class _UsersListState extends State<UsersList> {
                                           Row(
                                             children: <Widget>[
                                               Container(
-                                                  width: 70,
-                                                  height: 70,
+                                                  width: 60,
+                                                  height: 60,
                                                   child: CircleAvatar(
                                                       backgroundColor:
                                                           Colors.green,
                                                       foregroundColor:
                                                           Colors.green,
+                                                      // child: Center(
+                                                      //   child: FadeInImage
+                                                      //       .assetNetwork(
+                                                      //     placeholder:
+                                                      //         'assets/images/AJ.jpg',
+                                                      //     image: document
+                                                      //         .data()['picture'],
+                                                      //   ),
+                                                      // ),
                                                       backgroundImage:
-                                                          NetworkImage(document
-                                                                  .data()[
-                                                              'picture']))),
+
+                                                          // AssetImage(
+                                                          //     'assets/images/PSe.jpeg')
+                                                          NetworkImage(
+                                                              document.data()[
+                                                                  'picture']))),
                                               SizedBox(
                                                 width: 15.0,
                                               ),
@@ -149,9 +162,9 @@ class _UsersListState extends State<UsersList> {
                                                     SizedBox(
                                                       height: 5,
                                                     ),
-                                                    Text(
-                                                        document
-                                                            .data()['gender'],
+                                                    Text("Student",
+                                                        // document
+                                                        //     .data()['gender'],
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.grey)),
@@ -164,8 +177,16 @@ class _UsersListState extends State<UsersList> {
                                                 horizontal: 10, vertical: 10),
                                             child: FlatButton(
                                                 onPressed: () {
-                                                  auth.addConnection(
-                                                      document.id);
+                                                  // auth.addConnection(
+                                                  //     document.id);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ConnectionProfilePage(
+                                                                  ds: document,
+                                                                  id: document
+                                                                      .id)));
                                                 },
                                                 color: blu,
                                                 shape: RoundedRectangleBorder(
@@ -173,7 +194,7 @@ class _UsersListState extends State<UsersList> {
                                                         BorderRadius.circular(
                                                             20)),
                                                 child: Text(
-                                                  "Connect",
+                                                  "Profile",
                                                   style: TextStyle(
                                                       color: Colors.white),
                                                 )),

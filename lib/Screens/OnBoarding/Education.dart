@@ -251,8 +251,6 @@ class _EducationState extends State<Education> {
                     print("");
                   }
                   print(list.length);
-                  // print(list[0].degree);
-                  // print(list.length);
                 });
               },
             )

@@ -26,6 +26,8 @@ class _HomeState extends State<Home> {
   }
 
   bool status = true;
+
+  bool flag = true;
   @override
   Widget build(BuildContext context) {
     h = MediaQuery.of(context).size.height;
@@ -86,35 +88,52 @@ class _HomeState extends State<Home> {
                                             // Text(document.data()['description']),
                                             Expanded(
                                               child: Container(
-                                                width: 0.6 * w,
-                                                child: status
-                                                    ? GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            status = !status;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          child: Text(
-                                                              document.data()[
-                                                                  'description'],
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis),
-                                                        ),
-                                                      )
-                                                    : GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            status = !status;
-                                                          });
-                                                        },
-                                                        child: Text(
-                                                            document.data()[
-                                                                'description']),
-                                                      ),
-                                              ),
+                                                  width: 0.6 * w,
+                                                  child:
+                                                      !document.data()[
+                                                              'displayDesc']
+                                                          ? GestureDetector(
+                                                              onTap: () {
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'posts')
+                                                                    .doc(
+                                                                        document
+                                                                            .id)
+                                                                    .set({
+                                                                  "displayDesc":
+                                                                      true,
+                                                                }, SetOptions(merge: true));
+                                                              },
+                                                              child: Container(
+                                                                child: Text(
+                                                                    document.data()[
+                                                                        'description'],
+                                                                    maxLines: 2,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis),
+                                                              ),
+                                                            )
+                                                          : GestureDetector(
+                                                              onTap: () {
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'posts')
+                                                                    .doc(
+                                                                        document
+                                                                            .id)
+                                                                    .set({
+                                                                  "displayDesc":
+                                                                      false,
+                                                                }, SetOptions(merge: true));
+                                                              },
+                                                              child: Text(document
+                                                                      .data()[
+                                                                  'description']),
+                                                            )),
                                             )
                                           ],
                                         ),
@@ -126,8 +145,11 @@ class _HomeState extends State<Home> {
                                             border:
                                                 Border.all(color: Colors.black),
                                             image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/images/image.jpg'),
+                                              image:
+                                                  // NetworkImage(
+                                                  //     document.data()['picture']),
+                                                  AssetImage(
+                                                      'assets/images/A1.jpeg'),
                                               fit: BoxFit.fill,
                                             ),
                                           ),
@@ -145,21 +167,68 @@ class _HomeState extends State<Home> {
                         Padding(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              // crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.thumb_up),
-                                Text(" Like"),
+                                SizedBox(
+                                  width: 40,
+                                ),
+                                !document.data()['like']
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          // setState(() {
+                                          //   flag = !flag;
+                                          // });
+                                          FirebaseFirestore.instance
+                                              .collection('posts')
+                                              .doc(document.id)
+                                              .set({
+                                            "like": true,
+                                          }, SetOptions(merge: true));
+
+                                          // print(document.id);
+                                        },
+                                        child: Container(
+                                          child: Row(children: [
+                                            Icon(Icons.thumb_up,
+                                                color: Colors.black),
+                                            Text(" Like")
+                                          ]),
+                                        ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          // setState(() {
+                                          //   flag = !flag;
+                                          // });
+                                          FirebaseFirestore.instance
+                                              .collection('posts')
+                                              .doc(document.id)
+                                              .set({
+                                            "like": false,
+                                          }, SetOptions(merge: true));
+
+                                          // print(document.id);
+                                        },
+                                        child: Row(children: [
+                                          Icon(Icons.thumb_up,
+                                              color: Colors.red),
+                                          Text(
+                                            " Like",
+                                            style: TextStyle(color: Colors.red),
+                                          )
+                                        ]),
+                                      ),
                                 SizedBox(
                                   width: 0.1 * w,
                                 ),
-                                Icon(Icons.share),
-                                Text(" Share"),
-                                SizedBox(
-                                  width: 0.1 * w,
-                                ),
-                                Icon(Icons.comment),
-                                Text(" Comment")
+                                // Icon(Icons.share),
+                                // Text(" Share"),
+                                // SizedBox(
+                                //   width: 0.1 * w,
+                                // ),
+                                // Icon(Icons.comment),
+                                // Text(" Comment")
                               ],
                             )),
                       ],
@@ -167,10 +236,10 @@ class _HomeState extends State<Home> {
               }
             }).toList());
           }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {},
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {},
+      // ),
     );
   }
 }
