@@ -68,6 +68,18 @@ class Auth {
   Future<void> addConnection(String id) async {
     User firebaseUser = FirebaseAuth.instance.currentUser;
     print(firebaseUser.uid);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection('requestSent')
+        .doc(id)
+        .set({});
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .collection('requestReceived')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .set({});
     return users.doc(firebaseUser.uid).update({
       'connection': FieldValue.arrayUnion([id])
     });

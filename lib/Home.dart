@@ -1,12 +1,14 @@
+import 'package:aluminia/Screens/OnBoarding/isLiked.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
-  @override
+  // @override
   _HomeState createState() => _HomeState();
 }
 
@@ -145,11 +147,10 @@ class _HomeState extends State<Home> {
                                             border:
                                                 Border.all(color: Colors.black),
                                             image: DecorationImage(
-                                              image:
-                                                  // NetworkImage(
-                                                  //     document.data()['picture']),
-                                                  AssetImage(
-                                                      'assets/images/A1.jpeg'),
+                                              image: NetworkImage(
+                                                  document.data()['picture']),
+                                              // AssetImage(
+                                              //     'assets/images/A1.jpeg'),
                                               fit: BoxFit.fill,
                                             ),
                                           ),
@@ -173,52 +174,9 @@ class _HomeState extends State<Home> {
                                 SizedBox(
                                   width: 40,
                                 ),
-                                !document.data()['like']
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          // setState(() {
-                                          //   flag = !flag;
-                                          // });
-                                          FirebaseFirestore.instance
-                                              .collection('posts')
-                                              .doc(document.id)
-                                              .set({
-                                            "like": true,
-                                          }, SetOptions(merge: true));
-
-                                          // print(document.id);
-                                        },
-                                        child: Container(
-                                          child: Row(children: [
-                                            Icon(Icons.thumb_up,
-                                                color: Colors.black),
-                                            Text(" Like")
-                                          ]),
-                                        ),
-                                      )
-                                    : GestureDetector(
-                                        onTap: () {
-                                          // setState(() {
-                                          //   flag = !flag;
-                                          // });
-                                          FirebaseFirestore.instance
-                                              .collection('posts')
-                                              .doc(document.id)
-                                              .set({
-                                            "like": false,
-                                          }, SetOptions(merge: true));
-
-                                          // print(document.id);
-                                        },
-                                        child: Row(children: [
-                                          Icon(Icons.thumb_up,
-                                              color: Colors.red),
-                                          Text(
-                                            " Like",
-                                            style: TextStyle(color: Colors.red),
-                                          )
-                                        ]),
-                                      ),
+                                IsLiked(document.id)
+                                // !document.data()['like']
+                                ,
                                 SizedBox(
                                   width: 0.1 * w,
                                 ),

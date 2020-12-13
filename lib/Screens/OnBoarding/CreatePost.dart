@@ -64,7 +64,7 @@ class _PostState extends State<Post> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
+        // print('Document data: ${documentSnapshot.data()}');
       } else {
         print('Document does not exist on the database');
       }
@@ -130,19 +130,20 @@ class _PostState extends State<Post> {
                     ),
                   ),
                   Padding(
-                      padding: EdgeInsets.fromLTRB(20 * width / 411,
-                          height * 10 / 740, 20 * width / 411, 0),
-                      child: TextFormField(
-                        controller: _controller,
-                        focusNode: _descriptionsnode,
-                        decoration: InputDecoration(
-                          hintText: "Add description to your post",
-                          border: OutlineInputBorder(),
-                        ),
-                        textInputAction: TextInputAction.newline,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 15,
-                      ),),
+                    padding: EdgeInsets.fromLTRB(20 * width / 411,
+                        height * 10 / 740, 20 * width / 411, 0),
+                    child: TextFormField(
+                      controller: _controller,
+                      focusNode: _descriptionsnode,
+                      decoration: InputDecoration(
+                        hintText: "Add description to your post",
+                        border: OutlineInputBorder(),
+                      ),
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 15,
+                    ),
+                  ),
                   Divider(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),

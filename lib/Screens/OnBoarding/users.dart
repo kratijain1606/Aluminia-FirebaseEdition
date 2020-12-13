@@ -1,4 +1,5 @@
 import 'package:aluminia/Screens/OnBoarding/ConnectionProfile.dart';
+import 'package:aluminia/Screens/OnBoarding/requests.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,17 +54,38 @@ class _UsersListState extends State<UsersList> {
           "Aluminia",
           style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
         ),
-        leading: Icon(
-          Icons.more_vert,
-          color: Colors.black,
-        ),
+        // leading: Icon(
+        //   Icons.more_vert,
+        //   color: Colors.black,
+        // ),
         actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 0.05 * w),
-              child: CircleAvatar(
-                child: Icon(Icons.person),
-                backgroundColor: blu,
-              )),
+          // Padding(
+          //     padding: EdgeInsets.only(right: 0.05 * w),
+          //     child: CircleAvatar(
+          //       child: Icon(Icons.person),
+          //       backgroundColor: blu,
+          //     )),
+          DropdownButton(
+            underline: Container(),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.black,
+            ),
+            items: [
+              DropdownMenuItem(
+                value: 'Requests',
+                child: Container(
+                  child: Text('Requests'),
+                ),
+              )
+            ],
+            onChanged: (value) {
+              if (value == "Requests") {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Requests()));
+              }
+            },
+          )
         ],
         backgroundColor: Colors.white,
         centerTitle: true,

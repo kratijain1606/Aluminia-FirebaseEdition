@@ -274,6 +274,7 @@ class MapScreenState extends State<ConnectionProfilePage>
                           color: blu,
                           onPressed: () {
                             auth.addConnection(widget.id);
+
                             setState(() {
                               flag = !flag;
                             });

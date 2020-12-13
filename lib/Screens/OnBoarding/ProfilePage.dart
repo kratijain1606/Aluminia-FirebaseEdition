@@ -57,16 +57,15 @@ class MapScreenState extends State<ProfilePage>
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-      } else {
-        print('Document does not exist on the database');
-      }
-      setState(() {
         _namecontroller.text = documentSnapshot.data()['name'] ?? "";
         _dobcontroller.text = documentSnapshot.data()['dob'] ?? "";
         _contactcontroller.text = documentSnapshot.data()['phone'] ?? "";
         _fetchedimageUrl = documentSnapshot.data()['picture'];
-      });
+      } else {
+        print('Document does not exist on the database');
+      }
+      // setState(() {
+      // });
       setState(() {
         _isLoading = false;
       });
