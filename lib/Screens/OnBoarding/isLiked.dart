@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class IsLiked extends StatefulWidget {
   @override
-  IsLiked(this.id);
+  IsLiked(this.id, this.likes);
   String id;
+  int likes;
   _IsLikedState createState() => _IsLikedState();
 }
 
@@ -68,63 +70,84 @@ class _IsLikedState extends State<IsLiked> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? SpinKitWanderingCubes(
+            color: Colors.red,
+            size: 20,
+          )
         : !liked
-            ? GestureDetector(
-                onTap: () {
-                  // setState(() {
-                  //   flag = !flag;
-                  // });
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser.uid)
-                      .collection('likes')
-                      .doc(widget.id)
-                      .set({});
-                  FirebaseFirestore.instance
-                      .collection('posts')
-                      .doc(widget.id)
-                      .set({
-                    "like": true,
-                  }, SetOptions(merge: true));
-
-                  // print(document.id);
-                },
-                child: Container(
-                  child: Row(children: [
-                    Icon(Icons.thumb_up, color: Colors.black),
-                    Text(" Like")
-                  ]),
-                ),
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // setState(() {
+                      //   flag = !flag;
+                      // });
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser.uid)
+                          .collection('likes')
+                          .doc(widget.id)
+                          .set({});
+                      FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.id)
+                          .set({
+                        "likes": widget.likes + 1,
+                      }, SetOptions(merge: true));
+                      widget.likes += 1;
+                      // print(document.id);
+                    },
+                    child: Container(
+                      child: Row(children: [
+                        Icon(Icons.thumb_up, color: Colors.black),
+                        Text(" Like")
+                      ]),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(widget.likes.toString())
+                ],
               )
-            : GestureDetector(
-                onTap: () {
-                  // setState(() {
-                  //   flag = !flag;
-                  // });
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser.uid)
-                      .collection('likes')
-                      .doc(widget.id)
-                      .delete();
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // setState(() {
+                      //   flag = !flag;
+                      // });
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser.uid)
+                          .collection('likes')
+                          .doc(widget.id)
+                          .delete();
 
-                  FirebaseFirestore.instance
-                      .collection('posts')
-                      .doc(widget.id)
-                      .set({
-                    "like": false,
-                  }, SetOptions(merge: true));
-
-                  // print(document.id);
-                },
-                child: Row(children: [
-                  Icon(Icons.thumb_up, color: Colors.red),
-                  Text(
-                    " Like",
-                    style: TextStyle(color: Colors.red),
-                  )
-                ]),
+                      FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(widget.id)
+                          .set({
+                        "likes": widget.likes - 1,
+                      }, SetOptions(merge: true));
+                      widget.likes -= 1;
+                      // print(document.id);
+                    },
+                    child: Row(children: [
+                      Icon(Icons.thumb_up, color: Colors.red),
+                      Text(
+                        " Like",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    ]),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(widget.likes.toString())
+                ],
               );
   }
 }

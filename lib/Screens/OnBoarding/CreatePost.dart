@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 String imgUrl = "";
@@ -99,7 +100,11 @@ class _PostState extends State<Post> {
         elevation: 0,
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SpinKitWanderingCubes(
+              color: Colors.red,
+              size: 20,
+            ))
           : SingleChildScrollView(
               child: Column(
                 children: [
@@ -165,8 +170,8 @@ class _PostState extends State<Post> {
                     onPressed: () async {
                       final ref = FirebaseStorage.instance
                           .ref()
-                          .child('profile_images')
-                          .child(firebaseUser.uid + '.jpg');
+                          .child('post_images')
+                          .child(_userImageFile.path);
                       if (_userImageFile != null) {
                         await ref.putFile(_userImageFile).onComplete;
                         imgUrl = await ref.getDownloadURL();
@@ -192,7 +197,7 @@ class _PostState extends State<Post> {
         .add({
           "picture": imgUrl,
           'description': _controller.text,
-          'like': false,
+          'likes': 0,
           'displayDesc': false
         })
         .then((value) => print("User Added"))

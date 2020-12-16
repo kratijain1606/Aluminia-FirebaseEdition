@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:aluminia/client_secrets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:imgur/imgur.dart' as imgur;
 
@@ -107,6 +108,10 @@ class Auth {
         }, SetOptions(merge: true))
         .then((value) => print("Education Added"))
         .catchError((error) => print("Failed to add education: $error"));
+  }
+
+  Future<void> signOut() async {
+    return FirebaseAuth.instance.signOut();
   }
 
   Future<void> addWork(String company, String designation, String startDate,

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -95,7 +96,11 @@ class MapScreenState extends State<ProfilePage>
           elevation: 0,
         ),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: SpinKitWanderingCubes(
+                color: Colors.red,
+                size: 20,
+              ))
             : Container(
                 color: Colors.white,
                 child: new ListView(

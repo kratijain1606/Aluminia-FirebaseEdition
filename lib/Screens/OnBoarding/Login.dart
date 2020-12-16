@@ -4,6 +4,7 @@ import 'package:aluminia/Screens/OnBoarding/UserInfo.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
@@ -94,7 +95,11 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               )
-            : Center(child: CircularProgressIndicator()));
+            : Center(
+                child: SpinKitWanderingCubes(
+                color: Colors.red,
+                size: 20,
+              )));
   }
 
   Widget textInput(String hintText, bool obscure) {

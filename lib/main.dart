@@ -2,6 +2,7 @@ import 'package:aluminia/BottomNavigation.dart';
 import 'package:aluminia/Screens/OnBoarding/Login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -53,7 +54,11 @@ class _AluminiaState extends State<Aluminia> {
       home: Scaffold(
         backgroundColor: Colors.white,
         body: loading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: SpinKitWanderingCubes(
+                color: Colors.red,
+                size: 20,
+              ))
             : login ? MainPage() : Login(),
       ),
     );

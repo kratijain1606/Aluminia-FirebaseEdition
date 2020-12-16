@@ -3,6 +3,7 @@ import 'package:aluminia/Screens/OnBoarding/Education.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -123,7 +124,11 @@ class _UserInfoState extends State<UserInfo> {
                   )
                 ],
               ))
-            : Center(child: CircularProgressIndicator()));
+            : Center(
+                child: SpinKitWanderingCubes(
+                color: Colors.red,
+                size: 20,
+              )));
   }
 
   Widget textInput(String hintText, bool obscure) {

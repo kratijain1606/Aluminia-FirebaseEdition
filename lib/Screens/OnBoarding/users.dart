@@ -1,9 +1,10 @@
 import 'package:aluminia/Screens/OnBoarding/ConnectionProfile.dart';
-import 'package:aluminia/Screens/OnBoarding/requests.dart';
+import 'package:aluminia/Screens/OnBoarding/requestsReceived.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,12 +78,27 @@ class _UsersListState extends State<UsersList> {
                 child: Container(
                   child: Text('Requests'),
                 ),
+              ),
+              DropdownMenuItem(
+                value: 'Connections',
+                child: Container(
+                  child: Text('Connections'),
+                ),
               )
             ],
             onChanged: (value) {
               if (value == "Requests") {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Requests()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RequestsReceived(
+                            collection: 'requestReceived', flag: 1)));
+              } else if (value == "Connections") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RequestsReceived(
+                            collection: 'Connections', flag: 2)));
               }
             },
           )
@@ -92,7 +108,11 @@ class _UsersListState extends State<UsersList> {
         elevation: 0,
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: SpinKitWanderingCubes(
+              color: Colors.red,
+              size: 20,
+            ))
           : StreamBuilder<QuerySnapshot>(
               stream: users.snapshots(),
               builder: (BuildContext context,
