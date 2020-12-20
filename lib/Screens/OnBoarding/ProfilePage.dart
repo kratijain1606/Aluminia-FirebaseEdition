@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:aluminia/Screens/OnBoarding/Login.dart';
 import 'package:aluminia/Screens/OnBoarding/UserImagePicker.dart';
+import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-
+  Auth auth = new Auth();
   String gender;
 
   bool _isLoading = false;
@@ -84,12 +87,27 @@ class MapScreenState extends State<ProfilePage>
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
           actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 0.05 * width),
-                child: CircleAvatar(
-                  child: Icon(Icons.person),
-                  backgroundColor: blu,
-                ))
+            
+          DropdownButton(
+            underline: Container(),
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.black,
+            ),
+            items: [
+              DropdownMenuItem(
+                value: 'LogOut',
+                child: Container(
+                  child: Text('LogOut'),
+                ),
+              ),
+            ],
+            onChanged: (value) {
+              if (value == "LogOut") {
+                logOut(MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+              }
+            },
+          )
           ],
           backgroundColor: Colors.white,
           centerTitle: true,
@@ -491,5 +509,44 @@ class MapScreenState extends State<ProfilePage>
           gender = null;
       }
     });
+  }
+
+  logOut(double height, double width) {
+    return DialogBox(context, auth);
+  }
+
+    void DialogBox(BuildContext context, Auth _auth) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("signOut"),
+          content: new Text("signOut"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("yes"),
+              onPressed: () async {
+                // await _auth.signOut();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs?.clear();
+                //             Navigator.pushAndRemoveUntil(
+                //   context,
+                //  ModalRoute.withName("/Home")
+                // );
+                // Navigator.pushAndRemoveUntil(
+                //     context, newRoute, (route) => false);
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              },
+            ),
+            new FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: new Text("no"))
+          ],
+        );
+      },
+    );
   }
 }
