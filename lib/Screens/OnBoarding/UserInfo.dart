@@ -42,7 +42,9 @@ class _UserInfoState extends State<UserInfo> {
                     shadowColor: blu,
                     shape: CircleBorder(),
                     child: GestureDetector(
-                      onTap: () => {},
+                      onTap: () => {
+                        pickImage()
+                      },
                       child: CircleAvatar(
                         radius: 0.1 * h,
                         backgroundColor: Colors.white,

@@ -44,7 +44,7 @@ class Auth {
     return userCredential != null;
   }
 
-  Future<void> addUser(String name, String dob, String gender, File _imageFile,
+  Future<void> addUser(String name, String dob, String gender, String imageUrl,
       String phone) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = prefs.getString('email');
@@ -57,8 +57,7 @@ class Auth {
           'name': name,
           'email': email,
           'dob': dob,
-          'picture':
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKGQHa6WkBnTdHFI7ZsODlxNsTSkTht3bMEA&usqp=CAU",
+          'picture': imageUrl,
           'gender': gender,
           'phone': phone
         })
@@ -138,14 +137,16 @@ class Auth {
   }
 
   Future<String> uploadImage(File _imageFile) async {
-    String url = "";
-    await client.image
-        .uploadImage(
-            imagePath: _imageFile.path,
-            title: 'A title',
-            description: 'A description')
-        .then((image) => url = image.link);
-    return url;
+    print(_imageFile.hashCode);
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('pfp')
+        .child(_imageFile.hashCode.toString());
+    if (_imageFile != null) {
+      await ref.putFile(_imageFile).onComplete;
+      return await ref.getDownloadURL();
+    } 
+    return "";
   }
 
   Future<bool> getUser(String email) async {
