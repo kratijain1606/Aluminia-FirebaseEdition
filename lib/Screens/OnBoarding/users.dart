@@ -253,10 +253,6 @@ class _UsersListState extends State<UsersList> {
                   }
                 }).toList());
               }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {},
-      ),
     );
   }
 }
