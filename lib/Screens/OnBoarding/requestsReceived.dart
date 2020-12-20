@@ -64,9 +64,14 @@ class _RequestsReceivedState extends State<RequestsReceived> {
     });
     String n;
 
-    // call();
-    for (int i = 0; i < id.length; i++) {
-      getName(i, id[i]);
+    if(id.length > 0) {
+      for (int i = 0; i < id.length; i++) {
+        getName(i, id[i]);
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
