@@ -83,6 +83,9 @@ class _IsLikedState extends State<IsLiked> {
                       // setState(() {
                       //   flag = !flag;
                       // });
+                      setState(() {
+                        liked = true;
+                      });
                       FirebaseFirestore.instance
                           .collection('users')
                           .doc(FirebaseAuth.instance.currentUser.uid)
@@ -101,14 +104,11 @@ class _IsLikedState extends State<IsLiked> {
                     child: Container(
                       child: Row(children: [
                         Icon(Icons.thumb_up, color: Colors.black),
-                        Text(" Like")
+                        Text(" Like "),
+                        Text(widget.likes.toString())
                       ]),
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(widget.likes.toString())
                 ],
               )
             : Column(
@@ -119,6 +119,9 @@ class _IsLikedState extends State<IsLiked> {
                       // setState(() {
                       //   flag = !flag;
                       // });
+                      setState(() {
+                        liked = false;
+                      });
                       FirebaseFirestore.instance
                           .collection('users')
                           .doc(FirebaseAuth.instance.currentUser.uid)
@@ -138,15 +141,12 @@ class _IsLikedState extends State<IsLiked> {
                     child: Row(children: [
                       Icon(Icons.thumb_up, color: Colors.red),
                       Text(
-                        " Like",
+                        " Liked ",
                         style: TextStyle(color: Colors.red),
-                      )
+                      ),
+                      Text(widget.likes.toString())
                     ]),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(widget.likes.toString())
                 ],
               );
   }
