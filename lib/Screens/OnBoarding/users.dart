@@ -3,6 +3,8 @@ import 'package:aluminia/Screens/OnBoarding/requestsReceived.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -131,7 +133,7 @@ class _UsersListState extends State<UsersList> {
                     list = new List(snapshot.data.size);
                     print(snapshot.data.size);
                     getImage(document);
-                    return Container(
+                    return document.id != FirebaseAuth.instance.currentUser.uid ? Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
@@ -249,7 +251,7 @@ class _UsersListState extends State<UsersList> {
                               )),
                         ],
                       ),
-                    );
+                    ) : Container();
                   }
                 }).toList());
               }),
