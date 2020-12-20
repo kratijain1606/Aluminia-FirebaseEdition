@@ -87,14 +87,6 @@ class _PostState extends State<Post> {
           "Aluminia",
           style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
         ),
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 0.05 * width),
-              child: CircleAvatar(
-                child: Icon(Icons.person),
-                backgroundColor: blu,
-              ))
-        ],
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
