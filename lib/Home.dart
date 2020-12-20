@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aluminia/Screens/OnBoarding/Login.dart';
+import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
 import 'package:aluminia/Screens/OnBoarding/isLiked.dart';
 import 'package:aluminia/Services/auth.dart';
 import 'package:aluminia/const.dart';
@@ -8,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Screens/OnBoarding/CreatePost.dart';
 
 class Home extends StatefulWidget {
   // @override
@@ -57,26 +60,20 @@ class _HomeState extends State<Home> {
           style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
         ),
         actions: [
-          DropdownButton(
-            underline: Container(),
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.black,
-            ),
-            items: [
-              DropdownMenuItem(
-                value: 'LogOut',
-                child: Container(
-                  child: Text('LogOut'),
-                ),
-              ),
-            ],
-            onChanged: (value) {
-              if (value == "LogOut") {
-                logOut(h, w);
-              }
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => 
+      ProfilePage(
+          picUrl:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2z2f1qUHveOGHdu7uHfwmXG2CcU2Zr64GNg&usqp=CAU")));
             },
-          )
+          child :Padding(
+                padding: EdgeInsets.only(right: 0.05 * w),
+                child: CircleAvatar(
+                  child: Icon(Icons.person),
+                  backgroundColor: blu,
+                )),
+          ),
         ],
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -214,45 +211,12 @@ class _HomeState extends State<Home> {
                   }
                 }).toList());
               }),
-    );
-  }
-
-  logOut(double height, double width) {
-    return DialogBox(context, auth);
-  }
-
-  void DialogBox(BuildContext context, Auth _auth) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("signOut"),
-          content: new Text("signOut"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("yes"),
-              onPressed: () async {
-                // await _auth.signOut();
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs?.clear();
-                //             Navigator.pushAndRemoveUntil(
-                //   context,
-                //  ModalRoute.withName("/Home")
-                // );
-                // Navigator.pushAndRemoveUntil(
-                //     context, newRoute, (route) => false);
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Login()));
-              },
-            ),
-            new FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: new Text("no"))
-          ],
-        );
-      },
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Post()));
+        },
+      ),
     );
   }
 }
