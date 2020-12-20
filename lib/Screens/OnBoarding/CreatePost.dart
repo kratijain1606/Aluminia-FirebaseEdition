@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aluminia/Home.dart';
 import 'package:aluminia/Screens/OnBoarding/PostImagePicker.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +19,7 @@ void showSimpleDialogBox(BuildContext context, String message) {
         FlatButton(
           child: Text("okay"),
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
           },
         )
       ],
