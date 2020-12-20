@@ -31,12 +31,12 @@ class _HomeState extends State<Home> {
   CollectionReference posts;
   init() async {
     setState(() {
-      bool _isLoading = true;
+      _isLoading = true;
     });
 
     posts = FirebaseFirestore.instance.collection('posts');
     setState(() {
-      bool _isLoading = false;
+      _isLoading = false;
     });
   }
 
