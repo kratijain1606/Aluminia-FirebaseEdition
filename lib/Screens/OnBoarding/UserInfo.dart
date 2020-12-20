@@ -14,7 +14,7 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   double h, w;
-  String name, contact, gender, image;
+  String name, contact, gender, imageUrl;
   Auth auth = new Auth();
   File _imageFile;
   final picker = ImagePicker();
@@ -113,7 +113,7 @@ class _UserInfoState extends State<UserInfo> {
                       }),
                       auth
                           .addUser(name, pickedDate.toString(), gender,
-                              _imageFile, contact)
+                              imageUrl, contact)
                           .then((value) {
                         Navigator.push(
                             context,
@@ -171,6 +171,10 @@ class _UserInfoState extends State<UserInfo> {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
       _imageFile = File(pickedFile.path);
+    });
+    String imgUrl = await auth.uploadImage(_imageFile);
+    setState(() {
+      imageUrl = imgUrl;
     });
   }
 
