@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ConnectionProfilePage extends StatefulWidget {
@@ -26,8 +27,14 @@ class MapScreenState extends State<ConnectionProfilePage>
   String gender;
 
   int _radiobtnvalue = -1;
+
+  bool sent = true;
+  bool _isLoading = false;
   @override
   void initState() {
+    setState(() {
+      _isLoading = true;
+    });
     super.initState();
     init();
   }
@@ -48,9 +55,28 @@ class MapScreenState extends State<ConnectionProfilePage>
   bool val = true;
 
   String _fetchedimageUrl;
-
   int selectedIndex;
   init() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .collection('requestSent')
+        .doc(widget.id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+      if (documentSnapshot.exists) {
+        print('Document data: ${widget.id}');
+
+        sent = true;
+      } else {
+        sent = false;
+        print(widget.id);
+        print('Document does not exist on the database');
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    });
     setState(() {
       _namecontroller.text = widget.ds.data()['name'] ?? "";
       _dobcontroller.text = widget.ds.data()['dob'] ?? "";
@@ -83,224 +109,241 @@ class MapScreenState extends State<ConnectionProfilePage>
           centerTitle: true,
           elevation: 0,
         ),
-        body: Container(
-          color: Colors.white,
-          child: new ListView(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    color: Colors.white,
-                    child: new Column(
+        body: _isLoading
+            ? Center(
+                child: SpinKitWanderingCubes(
+                color: Colors.red,
+                size: 20,
+              ))
+            : Container(
+                color: Colors.white,
+                child: new ListView(
+                  children: <Widget>[
+                    Column(
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: height * 20 / 740),
-                          child: new Stack(
-                            fit: StackFit.loose,
+                        Container(
+                          color: Colors.white,
+                          child: new Column(
                             children: <Widget>[
-                              new Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  UserImagePicker(
-                                      _pickedImage, _fetchedimageUrl, true),
-                                ],
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: height * 20 / 740),
+                                child: new Stack(
+                                  fit: StackFit.loose,
+                                  children: <Widget>[
+                                    new Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        UserImagePicker(_pickedImage,
+                                            _fetchedimageUrl, true),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  new Container(
-                    color: Color(0xffFFFFFF),
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: height * 25.0 / 740),
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: height * 25.0 / 740,
-                                right: height * 25.0 / 740,
-                                top: height * 25.0 / 740),
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                new Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    new Text(
-                                      'Personal Information',
-                                      style: TextStyle(
-                                          fontSize: height * 18.0 / 740,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: height * 25.0 / 740,
-                                  right: height * 25.0 / 740,
-                                  top: height * 25.0 / 740),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Name',
-                                        style: TextStyle(
-                                            fontSize: height * 16.0 / 740,
-                                            fontWeight: FontWeight.bold),
+                        new Container(
+                          color: Color(0xffFFFFFF),
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(bottom: height * 25.0 / 740),
+                            child: new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: height * 25.0 / 740,
+                                      right: height * 25.0 / 740,
+                                      top: height * 25.0 / 740),
+                                  child: new Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      new Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          new Text(
+                                            'Personal Information',
+                                            style: TextStyle(
+                                                fontSize: height * 18.0 / 740,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: height * 25.0 / 740,
-                                  right: height * 25.0 / 740,
-                                  top: height * 2.0 / 740),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      controller: _namecontroller,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "Name"),
-                                      enabled: false,
-                                    ),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: height * 25.0 / 740,
+                                        right: height * 25.0 / 740,
+                                        top: height * 25.0 / 740),
+                                    child: new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        new Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            new Text(
+                                              'Name',
+                                              style: TextStyle(
+                                                  fontSize: height * 16.0 / 740,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: height * 25.0 / 740,
+                                        right: height * 25.0 / 740,
+                                        top: height * 2.0 / 740),
+                                    child: new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        new Flexible(
+                                          child: new TextField(
+                                            controller: _namecontroller,
+                                            decoration: const InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: "Name"),
+                                            enabled: false,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: height * 25.0 / 740,
+                                        right: height * 25.0 / 740,
+                                        top: height * 25.0 / 740),
+                                    child: new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        new Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            new Text(
+                                              'Date of birth',
+                                              style: TextStyle(
+                                                  fontSize: height * 16.0 / 740,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(12.0, 0, 0, 0),
+                                  child: ListTile(
+                                    title: dob.length == 0
+                                        ? Text(
+                                            "D.O.B.",
+                                            style: GoogleFonts.poppins(
+                                                fontSize: 18,
+                                                color: Colors.grey),
+                                          )
+                                        : Text(dob,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 18,
+                                            )),
+                                    onTap: () {},
                                   ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: height * 25.0 / 740,
-                                  right: height * 25.0 / 740,
-                                  top: height * 25.0 / 740),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Date of birth',
-                                        style: TextStyle(
-                                            fontSize: height * 16.0 / 740,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(12.0, 0, 0, 0),
-                            child: ListTile(
-                              title: dob.length == 0
-                                  ? Text(
-                                      "D.O.B.",
-                                      style: GoogleFonts.poppins(
-                                          fontSize: 18, color: Colors.grey),
-                                    )
-                                  : Text(dob,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 18,
-                                      )),
-                              onTap: () {},
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: height * 25.0 / 740,
+                                        right: height * 25.0 / 740,
+                                        top: height * 25.0 / 740),
+                                    child: new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        new Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            new Text(
+                                              'Contact no.',
+                                              style: TextStyle(
+                                                  fontSize: height * 16.0 / 740,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: height * 25.0 / 740,
+                                        right: height * 25.0 / 740,
+                                        top: height * 2.0 / 740),
+                                    child: new Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        new Flexible(
+                                          child: new TextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: _contactcontroller,
+                                            decoration: const InputDecoration(
+                                                hintText: "Contact",
+                                                border: InputBorder.none),
+                                            enabled: false,
+                                            autofocus: false,
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ],
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: height * 25.0 / 740,
-                                  right: height * 25.0 / 740,
-                                  top: height * 25.0 / 740),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Contact no.',
-                                        style: TextStyle(
-                                            fontSize: height * 16.0 / 740,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: height * 25.0 / 740,
-                                  right: height * 25.0 / 740,
-                                  top: height * 2.0 / 740),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      keyboardType: TextInputType.number,
-                                      controller: _contactcontroller,
-                                      decoration: const InputDecoration(
-                                          hintText: "Contact",
-                                          border: InputBorder.none),
-                                      enabled: false,
-                                      autofocus: false,
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                  flag
-                      ? RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: blu,
-                          onPressed: () {
-                            auth.addConnection(widget.id);
+                        ),
+                        !sent
+                            ? RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: blu,
+                                onPressed: () {
+                                  auth.addConnection(widget.id);
 
-                            setState(() {
-                              flag = !flag;
-                            });
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Connect",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25))),
-                        )
-                      : RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          color: Colors.grey,
-                          onPressed: () {},
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Connected",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25))),
-                        )
-                ],
-              ),
-            ],
-          ),
-        ));
+                                  setState(() {
+                                    flag = !flag;
+                                  });
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Connect",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25))),
+                              )
+                            : RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: Colors.grey,
+                                onPressed: () {},
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Sent",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25))),
+                              )
+                      ],
+                    ),
+                  ],
+                ),
+              ));
   }
 
   @override
