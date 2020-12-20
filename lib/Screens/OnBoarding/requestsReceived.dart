@@ -109,17 +109,9 @@ class _RequestsReceivedState extends State<RequestsReceived> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Aluminia",
+            "Requests received",
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
-          actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 0.05 * w),
-                child: CircleAvatar(
-                  child: Icon(Icons.person),
-                  backgroundColor: blu,
-                ))
-          ],
           backgroundColor: Colors.white,
           centerTitle: true,
           elevation: 0,
