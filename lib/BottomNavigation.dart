@@ -1,3 +1,4 @@
+import 'package:aluminia/Chat.dart';
 import 'package:aluminia/Home.dart';
 import 'package:aluminia/Screens/OnBoarding/CreatePost.dart';
 import 'package:aluminia/Screens/OnBoarding/ProfilePage.dart';
@@ -18,6 +19,7 @@ class _MainPageState extends State<MainPage> {
     List<Widget> _screens = [
       Home(),
       UsersList(),
+      Chat()
     ];
     double width = MediaQuery.of(context).size.width;
 
@@ -44,6 +46,12 @@ class _MainPageState extends State<MainPage> {
                   style: TextStyle(fontSize: width * 15 / 400),
                 ),
                 icon: Icon(Icons.people)),
+            BottomNavigationBarItem(
+                title: Text(
+                  "Chat",
+                  style: TextStyle(fontSize: width * 15 / 400),
+                ),
+                icon: Icon(Icons.chat)),
           ]),
     );
   }
