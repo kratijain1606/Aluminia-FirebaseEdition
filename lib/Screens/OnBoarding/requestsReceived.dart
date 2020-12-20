@@ -1,3 +1,4 @@
+import 'package:aluminia/ChatBox.dart';
 import 'package:aluminia/Screens/OnBoarding/ConnectionProfile.dart';
 import 'package:aluminia/const.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -247,6 +248,7 @@ class _RequestsReceivedState extends State<RequestsReceived> {
                                                     //   init();
                                                     //   // _isLoading = !_isLoading;
                                                     // });
+                                                    sendMessage(name[index], id[index]);
                                                   },
                                                   color: blu,
                                                   shape: RoundedRectangleBorder(
@@ -270,5 +272,30 @@ class _RequestsReceivedState extends State<RequestsReceived> {
                   );
                   // body:
                 }));
+  }
+
+  sendMessage(String userName, String userId) async {
+    List<String> users = [await auth.getName(FirebaseAuth.instance.currentUser.uid), userName];
+    String chatRoomId = getChatRoomId(FirebaseAuth.instance.currentUser.uid, userId);
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId" : chatRoomId,
+      "updatedAt": DateTime.now()
+    };
+    auth.addChatRoom(chatRoom, chatRoomId);
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => ChatBox(
+        chatRoomId: chatRoomId,
+        user: userName
+      )
+    ));
+  }
+
+  getChatRoomId(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
   }
 }
