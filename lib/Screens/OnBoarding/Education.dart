@@ -32,7 +32,7 @@ class _EducationState extends State<Education> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Aluminia",
+            "Education History",
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
           backgroundColor: Colors.white,
@@ -44,14 +44,6 @@ class _EducationState extends State<Education> {
           children: [
             SizedBox(
               height: w * 40 / 740,
-            ),
-            Center(
-                child: Text(
-              "Education History",
-              style: GoogleFonts.comfortaa(fontSize: 32),
-            )),
-            SizedBox(
-              height: 20,
             ),
             Container(
               height: 0.7 * h,

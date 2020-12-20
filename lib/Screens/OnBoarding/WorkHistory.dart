@@ -22,7 +22,7 @@ class _WorkHistoryState extends State<WorkHistory> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Aluminia",
+            "Work History",
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
           backgroundColor: Colors.white,
@@ -34,14 +34,6 @@ class _WorkHistoryState extends State<WorkHistory> {
           children: [
             SizedBox(
               height: w * 40 / 740,
-            ),
-            Center(
-                child: Text(
-              "Work History",
-              style: GoogleFonts.comfortaa(fontSize: 32),
-            )),
-            SizedBox(
-              height: 20,
             ),
             Container(
               height: 0.7 * h,
