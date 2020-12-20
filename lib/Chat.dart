@@ -1,5 +1,6 @@
 import 'package:aluminia/ChatBox.dart';
 import 'package:aluminia/Services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,8 +40,7 @@ class _ChatState extends State<Chat> {
   }
 
   getUserInfogetChats() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String me = prefs.getString('checkName');
+    String me = await auth.getName(FirebaseAuth.instance.currentUser.uid);
     setState(() {
       uid = me;
     });
