@@ -54,7 +54,7 @@ class _UsersListState extends State<UsersList> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Aluminia",
+          "People",
           style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
         ),
         // leading: Icon(
