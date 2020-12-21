@@ -46,26 +46,15 @@ class _ChatBoxState extends State<ChatBox> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: blu,
-        title: Row(
-          children: [
-            CircleAvatar(),
-            SizedBox(
-              width: 10,
-            ),
-            Center(child: Text(widget.user),),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.white),
-            onPressed: null,
-          )
-        ],
+        title: Text(widget.user)
       ),
       body: Container(
         child: Stack(
           children: [
-            chatMessages(),
+            Padding(
+              padding: EdgeInsets.only(bottom: 0.08 * h),
+              child: chatMessages(),
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               margin: EdgeInsets.only(bottom: 0.01 * h),
