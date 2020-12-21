@@ -28,7 +28,7 @@ class MapScreenState extends State<ConnectionProfilePage>
 
   int _radiobtnvalue = -1;
 
-  bool sent = true;
+  bool sent = false, connected = false;
   bool _isLoading = false;
   @override
   void initState() {
@@ -66,10 +66,26 @@ class MapScreenState extends State<ConnectionProfilePage>
         .then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
         print('Document data: ${widget.id}');
-
-        sent = true;
+        setState(() {
+          sent = true;
+        });
       } else {
-        sent = false;
+        FirebaseFirestore.instance
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .collection('Connections')
+        .doc(widget.id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) async {
+          if(documentSnapshot.exists) {
+            setState(() {
+              connected = true;
+            });
+          }
+        });
+        setState(() {
+          sent = false;
+        });
         print(widget.id);
         print('Document does not exist on the database');
       }
@@ -97,14 +113,6 @@ class MapScreenState extends State<ConnectionProfilePage>
             "Aluminia",
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
-          actions: [
-            Padding(
-                padding: EdgeInsets.only(right: 0.05 * width),
-                child: CircleAvatar(
-                  child: Icon(Icons.person),
-                  backgroundColor: blu,
-                ))
-          ],
           backgroundColor: Colors.white,
           centerTitle: true,
           elevation: 0,
@@ -308,8 +316,25 @@ class MapScreenState extends State<ConnectionProfilePage>
                             ),
                           ),
                         ),
-                        !sent
-                            ? RaisedButton(
+                        !sent && !connected ? RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                color: blu,
+                                onPressed: () {
+                                  auth.addConnection(widget.id);
+
+                                  setState(() {
+                                    flag = !flag;
+                                    sent = true;
+                                  });
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Connect",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25))),
+                              ) : !connected ?  RaisedButton(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
                                 color: blu,
@@ -322,10 +347,10 @@ class MapScreenState extends State<ConnectionProfilePage>
                                 },
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text("Connect",
+                                    child: Text("Sent",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 25))),
+                                            fontSize: 25)))
                               )
                             : RaisedButton(
                                 shape: RoundedRectangleBorder(
@@ -334,7 +359,7 @@ class MapScreenState extends State<ConnectionProfilePage>
                                 onPressed: () {},
                                 child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text("Sent",
+                                    child: Text("Connected",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 25))),
