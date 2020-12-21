@@ -114,8 +114,11 @@ class _RequestsReceivedState extends State<RequestsReceived> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: widget.flag == 1 ? Text(
             "Requests received",
+            style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
+          ) : Text(
+            "Connections",
             style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
           ),
           backgroundColor: Colors.white,
@@ -223,6 +226,26 @@ class _RequestsReceivedState extends State<RequestsReceived> {
                                                         .collection(
                                                             'requestReceived')
                                                         .doc(id[index])
+                                                        .delete();
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(id[index])
+                                                        .collection(
+                                                            'Connections')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            .uid)
+                                                        .set({});
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(id[index])
+                                                        .collection(
+                                                            'requestSent')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            .uid)
                                                         .delete();
                                                     setState(() {
                                                       init();
