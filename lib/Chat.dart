@@ -1,7 +1,9 @@
 import 'package:aluminia/ChatBox.dart';
 import 'package:aluminia/Services/auth.dart';
+import 'package:aluminia/const.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Chat extends StatefulWidget {
@@ -13,6 +15,7 @@ class _ChatState extends State<Chat> {
   Stream chatRooms;
   String uid;
   Auth auth = new Auth();
+  
 
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -56,6 +59,15 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: Text(
+            "Chat",
+            style: GoogleFonts.comfortaa(color: blu, fontSize: 32),
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          elevation: 0,
+        ),
       body: Container(
         child: chatRoomsList(),
       ),
@@ -71,7 +83,7 @@ class ChatRoomsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => ChatBox(
